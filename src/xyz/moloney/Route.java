@@ -4,19 +4,21 @@ package xyz.moloney;
 public class Route {
 
     private final String route;
-    private final String[] dirs;
+    private final String[] path;
     private final boolean isRoot;
 
     public Route(String request) {
 
+        System.out.println("request:" + request);
+
         this.route = request.split(" ")[1];
-        //System.out.printf("Route: %s\n", route );
+        System.out.printf("Route: %s\n", route );
 
         if (!route.equals("/")) {
-            this.dirs = route.split("/");
+            this.path = route.split("/");
             this.isRoot = false;
         } else {
-            this.dirs = new String[]{"/"};
+            this.path = new String[]{"/"};
             this.isRoot = true;
         }
     }
@@ -27,24 +29,19 @@ public class Route {
 
     public String getFilename() {
         if (!isRoot) {
-            return dirs[dirs.length - 1];
+            return path[path.length - 1];
         }
         return null;
     }
 
-    public String[] getDirs() {
-        return this.dirs;
+    public String[] getPath() {
+        return this.path;
     }
 
     @Override
     public String toString() {
-
-        StringBuilder b = new StringBuilder();
-        for (String s : this.dirs) {
-            b.append(s).append("/");
-        }
-        b.append("\n");
-        return b.toString();
+        return this.route;
     }
+
 
 }

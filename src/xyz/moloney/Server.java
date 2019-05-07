@@ -11,6 +11,7 @@ public class Server {
     private Socket client;
     private BufferedOutputStream output;
     private Route route;
+    private Request request;
 
     public static void main(String[] args) {
         Server s = new Server(4000);
@@ -19,12 +20,13 @@ public class Server {
             try {
                 s.client = s.socket.accept();
                 s.in = new BufferedReader(new InputStreamReader(s.client.getInputStream()));
-                System.out.println(s.getInput());
+                s.getInput();
             } catch (IOException e) {
                 System.err.println(e.toString());
             } catch (Exception ex) {
                 System.err.println(ex.toString());
             }
+
         }
     }
 
@@ -41,30 +43,28 @@ public class Server {
     private void initSocket() throws IOException {
         this.socket = new ServerSocket(this.port);
     }
-
-    private String getInput() throws IOException {
-        while (this.in.ready()) {
-            String input = this.in.readLine();
-
-            if (input != null) {
-                this.route = new Route(input);
-                System.out.println(route.getFilename());
-                respond();
-                return input;
+    
+    private void getInput() throws IOException {
+        if (this.in.ready()) {
+            String line = this.in.readLine();
+            StringBuilder req = new StringBuilder();
+            while (this.in.ready()) {
+                req.append(line).append("\n");
+                line = this.in.readLine();
             }
+            this.request = new Request(req.toString());
         }
-        return null;
+
     }
 
     private void respond() throws IOException {
-        output = new BufferedOutputStream(client.getOutputStream());
-        //byte[] out = "200 (OK)\n".getBytes();
-        StringBuilder b = new StringBuilder();
-        b.append("HTTP/1.1 200 OK").append('\n');
 
-       // byte[] out = "HTTP/1.1 200 OK".getBytes();
-        byte[] out = "HTTP/1.1 200 OK".getBytes();
-        output.write(out,0,out.length);
+        Response r = new Response(200);
+        byte[] out = r.toString().getBytes();
+
+        output = new BufferedOutputStream(client.getOutputStream());
+
+        output.write(out,0, out.length);
         output.flush();
     }
 
