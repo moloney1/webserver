@@ -43,7 +43,7 @@ public class Server {
     private void initSocket() throws IOException {
         this.socket = new ServerSocket(this.port);
     }
-    
+
     private void getInput() throws IOException {
         if (this.in.ready()) {
             String line = this.in.readLine();
@@ -53,6 +53,7 @@ public class Server {
                 line = this.in.readLine();
             }
             this.request = new Request(req.toString());
+            respond();
         }
 
     }
@@ -60,12 +61,16 @@ public class Server {
     private void respond() throws IOException {
 
         Response r = new Response(200);
+        r.addHeader("Content-Type: text/html; charset=UTF-8");
+
+
         byte[] out = r.toString().getBytes();
 
         output = new BufferedOutputStream(client.getOutputStream());
 
         output.write(out,0, out.length);
         output.flush();
+        output.close();
     }
 
 
