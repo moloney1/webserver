@@ -10,6 +10,7 @@ public class Server {
     private BufferedReader in;
     private Socket client;
     private BufferedOutputStream output;
+    private Route route;
 
     public static void main(String[] args) {
         Server s = new Server(4000);
@@ -44,8 +45,11 @@ public class Server {
     private String getInput() throws IOException {
         while (this.in.ready()) {
             String input = this.in.readLine();
-            respond();
+
             if (input != null) {
+                this.route = new Route(input);
+                System.out.println(route.getFilename());
+                respond();
                 return input;
             }
         }
@@ -59,9 +63,11 @@ public class Server {
         b.append("HTTP/1.1 200 OK").append('\n');
 
        // byte[] out = "HTTP/1.1 200 OK".getBytes();
-        byte[] out = "HTTP/1.1 403 Forbidden".getBytes();
+        byte[] out = "HTTP/1.1 200 OK".getBytes();
         output.write(out,0,out.length);
         output.flush();
     }
+
+
 
 }
