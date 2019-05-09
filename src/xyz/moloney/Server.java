@@ -62,7 +62,7 @@ public class Server {
 
         Response r = new Response(200);
         r.addHeader("Content-Type: text/html; charset=UTF-8");
-
+        r.setBody();
 
         byte[] out = r.toString().getBytes();
 
