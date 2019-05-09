@@ -14,4 +14,9 @@ public class Request {
         this.route = new Route(lines[0]);
         System.out.println(route.toString());
     }
+
+    public Route getRoute() {
+        return this.route;
+    }
+
 }

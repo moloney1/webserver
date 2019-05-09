@@ -47,7 +47,13 @@ public class Response {
         this.body = Response.sample();
     }
 
-    // TODO allow this to take instance or Route instead
+    public void setBody(Route route) {
+        if (route.isRoot())
+            setBody(DEFAULT);
+        else
+            setBody(route.toString());
+    }
+
     public void setBody(String filepath) {
 
         try {
@@ -68,7 +74,7 @@ public class Response {
         } catch (IOException e) {
             System.err.println(e.toString());
         }
-        System.out.printf("Interpreted path: %s\n", ROOT + filepath);
+        // System.out.printf("Interpreted path: %s\n", ROOT + filepath);
     }
 
     public static String sample() {

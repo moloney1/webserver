@@ -62,8 +62,12 @@ public class Server {
 
         Response r = new Response(200);
         r.addHeader("Content-Type: text/html; charset=UTF-8");
+
         // r.setBody();
-        r.setBody("/sample.html");
+
+        // r.setBody("/sample.html");
+
+        r.setBody(request.getRoute());
 
         System.out.println(r.getBody());
 
