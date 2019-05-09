@@ -43,7 +43,7 @@ public class Response {
         return b.toString();
     }
 
-    public void setBody() {
+    private void setBody() {
         this.body = Response.sample();
     }
 
@@ -54,7 +54,7 @@ public class Response {
             setBody(route.toString());
     }
 
-    public void setBody(String filepath) {
+    private void setBody(String filepath) {
 
         try {
             this.requested = new BufferedReader(new FileReader(ROOT + filepath));
