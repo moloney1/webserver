@@ -8,21 +8,22 @@ public class Response {
     private static final String ROOT = "./static";
     private static final String DEFAULT = "/index.html";
 
-    private String statusLine;
+    private Status status;
     private ArrayList<String> headers;
     private String body;
 
     public BufferedReader requested;
 
-    public Response(int status) {
-        this.statusLine = String.format("HTTP/1.1 %d %s", status, "OK");
+    public Response() {
+        //this.statusLine = String.format("HTTP/1.1 %d %s", status, "OK");
         this.headers = new ArrayList<>();
     }
 
     public static void main(String[] args) {
-        Response r = new Response(200);
+        Response r = new Response();
+        r.setStatus(Status.OK);
         r.setBody();
-        System.out.println(r.statusLine);
+        System.out.println(r.statusLine());
 
     }
 
@@ -32,7 +33,7 @@ public class Response {
 
     public String toString() {
         StringBuilder b = new StringBuilder();
-        b.append(this.statusLine).append("\n");
+        b.append(this.statusLine()).append("\n");
         for (String s : headers) {
             b.append(s).append("\n");
         }
@@ -93,6 +94,14 @@ public class Response {
 
     public String getBody() {
         return this.body;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    private String statusLine() {
+        return "HTTP/1.1 " + this.status.toString();
     }
 
 }

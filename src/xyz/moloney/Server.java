@@ -60,7 +60,8 @@ public class Server {
 
     private void respond() throws IOException {
 
-        Response r = new Response(200);
+        Response r = new Response();
+        r.setStatus(Status.OK);
         r.addHeader("Content-Type: text/html; charset=UTF-8");
 
         // r.setBody();
