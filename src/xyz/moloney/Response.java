@@ -1,13 +1,19 @@
 package xyz.moloney;
 
+import java.io.*;
 import java.util.ArrayList;
 
 public class Response {
 
+    private static final String ROOT = "./static";
+    private static final String DEFAULT = "/index.html";
+
     private String statusLine;
     private ArrayList<String> headers;
     private String body;
-    
+
+    public BufferedReader requested;
+
     public Response(int status) {
         this.statusLine = String.format("HTTP/1.1 %d %s", status, "OK");
         this.headers = new ArrayList<>();
@@ -17,6 +23,7 @@ public class Response {
         Response r = new Response(200);
         r.setBody();
         System.out.println(r.statusLine);
+
     }
 
     public void addHeader(String s) {
@@ -40,6 +47,30 @@ public class Response {
         this.body = Response.sample();
     }
 
+    // TODO allow this to take instance or Route instead
+    public void setBody(String filepath) {
+
+        try {
+            this.requested = new BufferedReader(new FileReader(ROOT + filepath));
+            // System.out.println(requested.readLine());
+            if (requested.ready()) {
+                String line = this.requested.readLine();
+                StringBuilder req = new StringBuilder();
+                while (this.requested.ready()) {
+                    req.append(line).append("\n");
+                    line = this.requested.readLine();
+                }
+                this.body = req.toString();
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println(e.toString());
+        } catch (IOException e) {
+            System.err.println(e.toString());
+        }
+        System.out.printf("Interpreted path: %s\n", ROOT + filepath);
+    }
+
     public static String sample() {
         return //"\n" +
                 "<!doctype html>\n" +
@@ -52,6 +83,10 @@ public class Response {
                 "        Nice.\n" +
                 "</body>\n" +
                 "</html>";
+    }
+
+    public String getBody() {
+        return this.body;
     }
 
 }
