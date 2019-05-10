@@ -1,6 +1,6 @@
 package xyz.moloney;
 
-// Represents route of a HTTP request e.g. /test.html
+// Represents route of a HTTP request e.g. /test.html, / etc.
 public class Route {
 
     private final String route;

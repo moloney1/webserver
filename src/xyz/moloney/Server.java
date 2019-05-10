@@ -10,7 +10,6 @@ public class Server {
     private BufferedReader in;
     private Socket client;
     private BufferedOutputStream output;
-    private Route route;
     private Request request;
 
     public static void main(String[] args) {

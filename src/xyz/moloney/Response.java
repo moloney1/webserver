@@ -7,6 +7,7 @@ public class Response {
 
     private static final String ROOT = "./static";
     private static final String DEFAULT = "/index.html";
+    private static final String NOT_FOUND_PAGE = "/not_found.html";
 
     private Status status;
     private ArrayList<String> headers;
@@ -15,7 +16,6 @@ public class Response {
     public BufferedReader requested;
 
     public Response() {
-        //this.statusLine = String.format("HTTP/1.1 %d %s", status, "OK");
         this.headers = new ArrayList<>();
     }
 
@@ -31,6 +31,7 @@ public class Response {
         headers.add(s);
     }
 
+    // Return entire response (status line, headers, body) as String
     public String toString() {
         StringBuilder b = new StringBuilder();
         b.append(this.statusLine()).append("\n");
@@ -56,6 +57,12 @@ public class Response {
     }
 
     private void setBody(String filepath) {
+
+        if (!new File(ROOT + filepath).exists()) {
+            this.setStatus(Status.NOT_FOUND);
+            this.setBody(NOT_FOUND_PAGE);
+            return;
+        }
 
         try {
             this.requested = new BufferedReader(new FileReader(ROOT + filepath));
